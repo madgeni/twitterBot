@@ -138,11 +138,12 @@ function runBot(auth) {
     let filteredURLS = []
     let unfilteredURLS = []
     let checkFilter
+    let twitAuth
     var sheets = google.sheets('v4');
 
     sheets.spreadsheets.values.get({
         auth: auth,
-        spreadsheetId: 'google spreadsheetID goes here',
+        spreadsheetId: '',
         range: 'filters!A1:B'
     }, function(err, response) {
         if (err) {
@@ -161,8 +162,7 @@ function runBot(auth) {
     });
     sheets.spreadsheets.values.get({
         auth: auth,
-        //spreadsheetId: '1xJ_bXWG8hoZqIO5hcJxxYlyxLNSOSKSEuJRueYpna9Q',
-        spreadsheetId: '13a41ojICmjaf8bOpLABtvQuUt8lbavYldWEteBkehvg',
+        spreadsheetId: '',
         range: 'FintechTest!A2:E'
     }, function(err, response) {
         if (err) {
@@ -179,7 +179,7 @@ function runBot(auth) {
                 let theUrl = row[1]
                 //  console.log(theUrl)
                 if (row[4]) {
-                    let twitAuth = row[4]
+                    twitAuth = row[4]
                 }
                 if (row[3] === 'Yes') {
                     checkFilter = 'yes'
