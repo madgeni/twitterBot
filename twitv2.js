@@ -11,7 +11,9 @@ const
     fs          = require('fs'),
     conf        = require('./conf.json'),
     Twitter     = require('simple-twitter'),
-    readline = require('readline')
+    readline = require('readline'),
+    limit = 6;
+
 
 var filterList = []
 require('events').EventEmitter.prototype._maxListeners = 100;
@@ -190,9 +192,11 @@ function runBot(auth) {
 }
 
 function feedme(url, filterFlag, twitAuth) {
+    let count;
 
     feedParser.parse(url).then((items) => {
         items.forEach(item => {
+            if (items && count < limit) {
             // Get the date and time right now
 
             let lastRunTime = LastRun()
@@ -251,6 +255,7 @@ function feedme(url, filterFlag, twitAuth) {
                         }
                     }
                 }
+            } count++
             }
         })
         }).catch(error => console.error('error on : ', url, ' err is : ',  error));
