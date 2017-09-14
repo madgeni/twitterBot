@@ -199,43 +199,25 @@ function feedme(url, filterFlag, twitAuth) {
         items.forEach(item => {
             //  console.log(url)
             // Get the date and time right now
-            var dateNow = new Date();
 
-            // Get the date 11 minutes ago (roughly the last time the bot finished running)
-            // Now an 15 mins (900000) + 1min (60000) = 960000
-            var lastRun = dateNow - 960000;
-            // Get the date 12 hours ago
-            var twelveHours = dateNow - 43200000;
-            // Get the date 12 hours and 10 minutes ago
-            var twelveHoursTen = dateNow - 43296000;
-            let dateYPTconv = new Date(twelveHoursTen).toISOString();
-            let lastRunConv =  new Date(lastRun).toISOString();
-            let dateYdayConv = new Date(twelveHours).toISOString()
+            let lastRunTime = LastRun()
 
-            lastRunConv = new Date(lastRunConv)
-
-            dateYdayConv = new Date(dateYdayConv)
-
-            let testitemdate = new Date(item.date)
-            dateYPTconv = new Date(dateYPTconv)
             let continueFlag
 
-        //    console.log('item date, yesterday, 12hours+10, last run ', item.date , ' - ', dateYPTconv, ' - ', dateYdayConv, ' - ' , lastRunConv)
+      // Ensure we only try to post things published since the last run
+            if (item.date > lastRunTime) {
 
-            // Ensure we only try to post things published between 12 hours and 12 hours 10 minutes ago
-            if ((item.date > dateYPTconv && item.date < dateYdayConv) || item.date > lastRunConv) {
-              //  console.log("item date, a day ago, ")
-               // console.log(item.date, dateYPTconv, dateYdayConv2, lastConv2)
                 // Here we are ensuring that long post titles don't lose the link in the tweet.
                 let titleLength = item.title.length;
-            //    console.log(filterFlag)
+
+                //some feeds have filter words in the XLS
                 if (filterFlag === 'yes') {
-             //       console.log("i'm in the filtered list, url, filterflag ", url, filterFlag)
 
                     let length = filterList.length;
 
                     while (length--) {
                         let intra = item.title;
+                        // some feeds post duplicate tweets with author in brackets - strip these
                         if (intra.indexOf('(') > -1){
                             break
                         }
@@ -256,8 +238,9 @@ function feedme(url, filterFlag, twitAuth) {
                     }
                 }
                 else {
-                   // console.log("am i in the unfiltered list? - url, flag ", url, filterFlag)
                     let itemTitle = item.title;
+
+                    // again with the bracket
                     if (itemTitle.indexOf('(') > -1){
                         continueFlag = 0
                     }
@@ -297,4 +280,19 @@ function createTweet(title, link, author){
     );
 
 }
+function LastRun(){
+    let dateNow = new Date();
+
+    // Get the date 11 minutes ago (roughly the last time the bot finished running)
+    // Now an 15 mins (900000) + 1min (60000) = 960000
+    let lastRun = dateNow - 960000
+    //43200000 - DAY
+    //900000 -
+    let lastRunConv =  new Date(lastRun).toISOString();
+    let lastRunConv2 = new Date(lastRunConv)
+
+    return (lastRunConv2)
+
+}
+
 
