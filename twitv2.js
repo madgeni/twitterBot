@@ -171,22 +171,18 @@ function runBot(auth) {
         if (rows.length === 0) {
             console.log('No data found.');
         } else {
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var theUrl = row[1]
+            checkFilter = 'no'
+            for (let i = 0; i < rows.length; i++) {
+                let row = rows[i];
+                let theUrl = row[1]
+                //  console.log(theUrl)
                 if (row[4]) {
-                    var twitAuth = row[4]
+                    let twitAuth = row[4]
                 }
                 if (row[3] === 'Yes') {
                     checkFilter = 'yes'
-                        feedme(theUrl, checkFilter, twitAuth)
-                    checkFilter = ''
                 }
-                else {
-                    checkFilter = 'no'
-                        feedme(theUrl, checkFilter, twitAuth)
-                    }
-                checkFilter = ''
+                feedme(theUrl, checkFilter, twitAuth)
             }
 
         }
@@ -197,7 +193,6 @@ function feedme(url, filterFlag, twitAuth) {
 
     feedParser.parse(url).then((items) => {
         items.forEach(item => {
-            //  console.log(url)
             // Get the date and time right now
 
             let lastRunTime = LastRun()
